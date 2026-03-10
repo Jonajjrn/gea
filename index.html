@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Per Gea 🌻</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Schermata di Avviso Iniziale */
+    #warning-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      z-index: 100;
+      transition: opacity 0.8s ease;
+      padding: 20px;
+    }
+
+    #warning-screen h2 { font-weight: 300; margin-bottom: 20px; }
+    #warning-screen p { color: #ccc; margin-bottom: 30px; }
+
+    #start-btn {
+      padding: 12px 30px;
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      letter-spacing: 2px;
+      transition: all 0.3s;
+    }
+
+    #start-btn:hover {
+      background: white;
+      color: black;
+    }
+
+    /* Le Scene - Aumentato il tempo a 3 secondi per un effetto molto dolce */
+    .scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 3s ease-in-out; 
+    }
+
+    /* Ordine dei livelli dal più profondo (4) a quello in superficie (1) */
+    #scene4 { background-image: url('Divano4.png'); z-index: 1; }
+    #scene3 { background-image: url('Divano3.png'); z-index: 2; }
+    #scene2 { background-image: url('Divano2.png'); z-index: 3; }
+    #scene1 { background-image: url('Divano.png'); z-index: 4; }
+
+    /* Hotspot sul Vinile */
+    #hotspot-vinyl {
+      position: absolute;
+      top: 45%; 
+      left: 18%; 
+      width: 14%; 
+      height: 12%;
+      cursor: pointer;
+      z-index: 10;
+      border-radius: 50%;
+    }
+
+    .hidden {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="warning-screen">
+    <h2>Prima di iniziare...</h2>
+    <p>Per un'esperienza migliore, apri il sito da <b>PC</b> e alza il <b>volume</b>. 🔊</p>
+    <button id="start-btn">SONO PRONTO</button>
+  </div>
+
+  <div id="scene4" class="scene"></div>
+  <div id="scene3" class="scene"></div>
+  <div id="scene2" class="scene"></div>
+  <div id="scene1" class="scene">
+    <div id="hotspot-vinyl"></div>
+  </div>
+
+  <audio id="bg-music" src="music.mp3" loop></audio>
+
+  <script>
+    const warningScreen = document.getElementById('warning-screen');
+    const startBtn = document.getElementById('start-btn');
+    
+    // Selezioniamo tutte le scene da sfumare
+    const scene1 = document.getElementById('scene1');
+    const scene2 = document.getElementById('scene2');
+    const scene3 = document.getElementById('scene3');
+    
+    const vinyl = document.getElementById('hotspot-vinyl');
+    const music = document.getElementById('bg-music');
+
+    startBtn.addEventListener('click', () => {
+      warningScreen.classList.add('hidden');
+    });
+
+    vinyl.addEventListener('click', () => {
+      // 1. Partono musica e blocco dei click
+      music.play().catch(e => console.log("Audio bloccato:", e));
+      vinyl.style.pointerEvents = 'none';
+
+      // 2. Subito: dissolve la scena 1 (rivelando la 2)
+      scene1.style.opacity = '0';
+
+      // 3. Dopo 4 secondi (3 di animazione + 1 di respiro): dissolve la scena 2
+      setTimeout(() => {
+        scene2.style.opacity = '0';
+      }, 4000);
+
+      // 4. Dopo altri 4 secondi: dissolve la scena 3 per arrivare allo zoom finale
+      setTimeout(() => {
+        scene3.style.opacity = '0';
+      }, 8000);
+    });
+  </script>
+
+</body>
+</html>
