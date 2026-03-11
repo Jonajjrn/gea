@@ -6,141 +6,197 @@
   <title>Per Gea 🌻</title>
   <style>
     body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
       overflow: hidden;
       background-color: #000;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Schermata di Avviso Iniziale */
+    /* Schermata Avviso */
     #warning-screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #1a1a1a;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      text-align: center;
-      z-index: 100;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: #1a1a1a; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; color: white; z-index: 100;
       transition: opacity 0.8s ease;
-      padding: 20px;
     }
-
-    #warning-screen h2 { font-weight: 300; margin-bottom: 20px; }
-    #warning-screen p { color: #ccc; margin-bottom: 30px; }
 
     #start-btn {
-      padding: 12px 30px;
-      background: transparent;
-      border: 1px solid white;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-      letter-spacing: 2px;
-      transition: all 0.3s;
+      padding: 12px 30px; background: transparent; border: 1px solid white;
+      color: white; cursor: pointer; letter-spacing: 2px; margin-top: 20px;
     }
 
-    #start-btn:hover {
-      background: white;
-      color: black;
-    }
-
-    /* Le Scene - Aumentato il tempo a 3 secondi per un effetto molto dolce */
+    /* Scene Base */
     .scene {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      transition: opacity 3s ease-in-out; 
-    }
-
-    /* Ordine dei livelli dal più profondo (4) a quello in superficie (1) */
-    #scene4 { background-image: url('Divano4.png'); z-index: 1; }
-    #scene3 { background-image: url('Divano3.png'); z-index: 2; }
-    #scene2 { background-image: url('Divano2.png'); z-index: 3; }
-    #scene1 { background-image: url('Divano.png'); z-index: 4; }
-
-    /* Hotspot sul Vinile */
-    #hotspot-vinyl {
-      position: absolute;
-      top: 45%; 
-      left: 18%; 
-      width: 14%; 
-      height: 12%;
-      cursor: pointer;
-      z-index: 10;
-      border-radius: 50%;
-    }
-
-    .hidden {
-      opacity: 0 !important;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-size: cover; background-position: center;
+      /* RALLENTATA: da 3s a 5s per una sfumatura più dolce */
+      transition: opacity 5s ease-in-out; 
       pointer-events: none;
     }
+
+    /* GERARCHIA Z-INDEX */
+    #finale  { background-image: url('Finale.png'); z-index: 1; opacity: 1; }
+    #stanza5 { background-image: url('Stanza5.png'); z-index: 2; opacity: 1; }
+    #stanza4 { background-image: url('Stanza4.png'); z-index: 3; opacity: 1; }
+    #stanza3 { background-image: url('Stanza3.png'); z-index: 4; opacity: 1; }
+    #stanza2 { background-image: url('Stanza2.png'); z-index: 5; opacity: 1; }
+    #stanza1 { background-image: url('Stanza1.png'); z-index: 6; opacity: 1; }
+    #scene5  { background-image: url('Divano5.png'); z-index: 7; opacity: 1; }
+    #scene4  { background-image: url('Divano4.png'); z-index: 8; opacity: 1; }
+    #scene3  { background-image: url('Divano3.png'); z-index: 9; opacity: 1; }
+    #scene2  { background-image: url('Divano2.png'); z-index: 10; opacity: 1; }
+    #scene1  { background-image: url('Divano.png'); z-index: 11; opacity: 1; }
+
+    /* Griglia Orizzontale Foto (.jpg) */
+    #photo-grid {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 30; display: flex; flex-direction: row; 
+      align-items: center; justify-content: center; gap: 40px;
+      pointer-events: none;
+    }
+
+    .memory-photo {
+      width: 300px; height: auto; border: 10px solid white;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.6); opacity: 0;
+      transition: opacity 2s ease; transform: rotate(var(--r));
+    }
+
+    /* Tasto NEXT Rosso */
+    #next-btn {
+      position: absolute; bottom: 50px; right: 50px;
+      padding: 20px 50px; background-color: #e60000; color: white;
+      border: none; border-radius: 10px; cursor: pointer;
+      font-size: 24px; font-weight: bold; text-transform: uppercase;
+      z-index: 40; opacity: 0; pointer-events: none; transition: all 0.4s ease;
+    }
+
+    /* Hotspot "Gira Biglietto" su Stanza 5 */
+    #hotspot-gira {
+      position: absolute; bottom: 5%; right: 5%; width: 35%; height: 20%;
+      cursor: pointer; z-index: 50;
+    }
+
+    /* Helpers */
+    .active-layer { pointer-events: auto !important; }
+    .hidden { opacity: 0 !important; pointer-events: none !important; }
+    .visible { opacity: 1 !important; }
+
+    /* Hotspots Vinile e Scelte */
+    .option-btn { position: absolute; cursor: pointer; z-index: 20; }
+    #btn-camera { top: 10%; left: 28%; width: 42%; height: 12%; }
+    #btn-disco { top: 25%; left: 26%; width: 40%; height: 12%; }
+    #hotspot-vinyl { position: absolute; top: 45%; left: 18%; width: 14%; height: 12%; cursor: pointer; z-index: 20; }
   </style>
 </head>
 <body>
 
   <div id="warning-screen">
     <h2>Prima di iniziare...</h2>
-    <p>Per un'esperienza migliore, apri il sito da <b>PC</b> e alza il <b>volume</b>. 🔊</p>
-    <button id="start-btn">SONO PRONTO</button>
+        <p>Tieni a mente che il sito è interattivo, ci sono dei bottoni da premere se non dovesse avanzare, quind prendi il <b>PC, premi fn+f11 per vederlo a schermo intero</b> alza il <b>volume, buona continuazione))</b>. 🔊</p>
+    <button id="start-btn">SONO PRONTA</button>
   </div>
 
+  <div id="photo-grid">
+    <img src="foto1.jpg" class="memory-photo" style="--r: -3deg;">
+    <img src="foto2.jpg" class="memory-photo" style="--r: 2deg;">
+    <img src="foto3.jpg" class="memory-photo" style="--r: -2deg;">
+    <button id="next-btn">NEXT →</button>
+  </div>
+
+  <div id="finale" class="scene"></div>
+  <div id="stanza5" class="scene"><div id="hotspot-gira" class="hidden"></div></div>
+  <div id="stanza4" class="scene"></div>
+  <div id="stanza3" class="scene"></div>
+  <div id="stanza2" class="scene"></div>
+  <div id="stanza1" class="scene"></div>
+  <div id="scene5" class="scene"><div id="btn-camera" class="option-btn"></div><div id="btn-disco" class="option-btn"></div></div>
   <div id="scene4" class="scene"></div>
   <div id="scene3" class="scene"></div>
   <div id="scene2" class="scene"></div>
-  <div id="scene1" class="scene">
-    <div id="hotspot-vinyl"></div>
-  </div>
+  <div id="scene1" class="scene active-layer"><div id="hotspot-vinyl"></div></div>
 
   <audio id="bg-music" src="music.mp3" loop></audio>
 
   <script>
-    const warningScreen = document.getElementById('warning-screen');
-    const startBtn = document.getElementById('start-btn');
-    
-    // Selezioniamo tutte le scene da sfumare
-    const scene1 = document.getElementById('scene1');
-    const scene2 = document.getElementById('scene2');
-    const scene3 = document.getElementById('scene3');
-    
-    const vinyl = document.getElementById('hotspot-vinyl');
     const music = document.getElementById('bg-music');
+    const playlist = ['music.mp3', 'music2.mp3', 'music3.mp3'];
+    let currentTrackIndex = 0;
 
-    startBtn.addEventListener('click', () => {
-      warningScreen.classList.add('hidden');
+    const scenes = {
+      warning: document.getElementById('warning-screen'),
+      s1: document.getElementById('scene1'), s2: document.getElementById('scene2'),
+      s3: document.getElementById('scene3'), s4: document.getElementById('scene4'),
+      s5: document.getElementById('scene5'),
+      st1: document.getElementById('stanza1'), st2: document.getElementById('stanza2'),
+      st3: document.getElementById('stanza3'), st4: document.getElementById('stanza4'),
+      st5: document.getElementById('stanza5'), fin: document.getElementById('finale')
+    };
+
+    const photos = document.querySelectorAll('.memory-photo');
+    const nextBtn = document.getElementById('next-btn');
+    const giraBtn = document.getElementById('hotspot-gira');
+
+    document.getElementById('start-btn').addEventListener('click', () => scenes.warning.classList.add('hidden'));
+
+    // SEQUENZA DIVANO: Tempi raddoppiati per un'attesa più dolce
+    document.getElementById('hotspot-vinyl').addEventListener('click', function() {
+      music.play();
+      this.style.pointerEvents = 'none';
+      scenes.s1.classList.add('hidden');
+      setTimeout(() => scenes.s2.classList.add('hidden'), 6000); // Da 4 a 6s
+      setTimeout(() => scenes.s3.classList.add('hidden'), 12000); // Da 8 a 12s
+      setTimeout(() => { 
+        scenes.s4.classList.add('hidden'); 
+        scenes.s5.classList.add('active-layer'); 
+      }, 18000); // Da 12 a 18s
     });
 
-    vinyl.addEventListener('click', () => {
-      // 1. Partono musica e blocco dei click
-      music.play().catch(e => console.log("Audio bloccato:", e));
-      vinyl.style.pointerEvents = 'none';
+    document.getElementById('btn-disco').addEventListener('click', () => {
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      music.src = playlist[currentTrackIndex];
+      music.pause();
+      [scenes.s1, scenes.s2, scenes.s3, scenes.s4].forEach(s => {
+        s.style.transition = 'none'; s.classList.remove('hidden');
+        void s.offsetWidth; s.style.transition = 'opacity 5s ease-in-out';
+      });
+      scenes.s1.classList.add('active-layer');
+    });
 
-      // 2. Subito: dissolve la scena 1 (rivelando la 2)
-      scene1.style.opacity = '0';
+    // SEQUENZA STANZA: Raddoppiata
+    document.getElementById('btn-camera').addEventListener('click', () => {
+      scenes.s5.classList.add('hidden');
+      setTimeout(() => scenes.st1.classList.add('hidden'), 6000); // Passa a Stanza 2 (6s)
 
-      // 3. Dopo 4 secondi (3 di animazione + 1 di respiro): dissolve la scena 2
       setTimeout(() => {
-        scene2.style.opacity = '0';
-      }, 4000);
+        scenes.st2.classList.add('hidden'); // Passa a Stanza 3 + Foto (14s)
+        // Comparsa foto più lenta
+        setTimeout(() => photos[0].classList.add('visible'), 2000);
+        setTimeout(() => photos[1].classList.add('visible'), 5000);
+        setTimeout(() => {
+          photos[2].classList.add('visible');
+          nextBtn.classList.add('visible');
+          nextBtn.classList.add('active-layer');
+        }, 8000);
+      }, 14000);
+    });
 
-      // 4. Dopo altri 4 secondi: dissolve la scena 3 per arrivare allo zoom finale
+    // SEQUENZA FINALE: Raddoppiata
+    nextBtn.addEventListener('click', () => {
+      document.getElementById('photo-grid').classList.add('hidden');
+      scenes.st3.classList.add('hidden'); 
+      
+      // Passaggio a Stanza 5 (il biglietto) rallentato a 10 secondi
       setTimeout(() => {
-        scene3.style.opacity = '0';
-      }, 8000);
+        scenes.st4.classList.add('hidden');
+        giraBtn.classList.remove('hidden');
+        giraBtn.classList.add('active-layer');
+      }, 10000);
+    });
+
+    giraBtn.addEventListener('click', () => {
+      scenes.st5.classList.add('hidden'); // Rivela finale.png
     });
   </script>
-
 </body>
 </html>
